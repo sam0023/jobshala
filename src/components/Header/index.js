@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import {withRouter} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 
 const Header = props => {
   const onLogout = () => {
@@ -16,8 +16,13 @@ const Header = props => {
         alt="website logo"
       />
       <ul>
-        <li>Home</li>
-        <li>Jobs</li>
+        <Link to="/">
+          <li>Home</li>
+        </Link>
+
+        <Link to="/login">
+          <li>Jobs</li>
+        </Link>
       </ul>
       <button type="button" onClick={onLogout}>
         logout
