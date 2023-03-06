@@ -1,16 +1,87 @@
 import {Component} from 'react'
 import Profile from '../Profile'
+import EmploymentOptions from '../EmploymentOptions'
+import SalaryOptions from '../SalaryOptions'
 import Header from '../Header'
 import JobCard from '../JobCard'
 
 import './index.css'
+import {async} from 'rxjs'
 
-class FindJobs extends Components {
+const employmentTypesList = [
+  {
+    label: 'Full Time',
+    employmentTypeId: 'FULLTIME',
+  },
+  {
+    label: 'Part Time',
+    employmentTypeId: 'PARTTIME',
+  },
+  {
+    label: 'Freelance',
+    employmentTypeId: 'FREELANCE',
+  },
+  {
+    label: 'Internship',
+    employmentTypeId: 'INTERNSHIP',
+  },
+]
+
+const salaryRangesList = [
+  {
+    salaryRangeId: '1000000',
+    label: '10 LPA and above',
+  },
+  {
+    salaryRangeId: '2000000',
+    label: '20 LPA and above',
+  },
+  {
+    salaryRangeId: '3000000',
+    label: '30 LPA and above',
+  },
+  {
+    salaryRangeId: '4000000',
+    label: '40 LPA and above',
+  },
+]
+
+class FindJobs extends Component {
   state = {
     jobsList: [],
     employmentType: [],
-    salaryRange: '',
-    search: '',
+    minimumPackage: '',
+    apiSearch: '',
+    activeSearch: '',
+  }
+
+  componentDidMount() {
+    this.apiRequest()
+  }
+
+  apiRequest = async () => {
+    const {employmentType, minimumPackage, apiSearch} = this.state
+    const api = `https://apis.ccbp.in/jobs?employment_type=${employmentType.join(
+      ',',
+    )}&minimum_package=${minimumPackage}&search=${apiSearch}`
+
+    const response = await fetch(api)
+    const data = response.json()
+
+    if (response.ok) {
+      const {jobs} = data
+
+      const updatedData = jobs.map(eachJob => ({
+        companyLogoUrl: eachJob.company_logo_url,
+        employmentType: eachJob.employment_type,
+        id: eachJob.id,
+        jobDescription: eachJob.job_description,
+        location: eachJob.location,
+        packagePerAnnum: eachJob.package_per_annum,
+        rating: eachJob.rating,
+        title: eachJob.title,
+      }))
+    }
   }
 
   render() {
@@ -21,7 +92,12 @@ class FindJobs extends Components {
         <div>
           <div>
             <Profile />
-            {this.renderOptions()}
+            <hr />
+            <p>Types of Employment</p>
+            <EmploymentOptions options={employmentTypesList} />
+            <hr />
+            <p>Salary Range</p>
+            <SalaryOptions options={salaryRangesList} />
           </div>
 
           <div>
