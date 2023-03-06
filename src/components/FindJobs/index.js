@@ -86,6 +86,24 @@ class FindJobs extends Component {
     }
   }
 
+  onChangeEmploymentOption = employmentOptions => {
+    this.setState({employmentType: employmentOptions}, this.apiRequest())
+  }
+
+  onChangePackageType = minimumPackage => {
+    this.setState({minimumPackage}, this.apiRequest())
+  }
+
+  onChangeSearch = event => {
+    const activeSearch = event.target.value
+    this.setState({activeSearch})
+  }
+
+  onClickSearch = () => {
+    const {activeSearch} = this.state
+    this.setState({apiSearch: activeSearch}, this.apiRequest)
+  }
+
   render() {
     const {jobsList} = this.state
     return (
@@ -96,7 +114,10 @@ class FindJobs extends Component {
             <Profile />
             <hr />
             <p>Types of Employment</p>
-            <EmploymentOptions options={employmentTypesList} />
+            <EmploymentOptions
+              options={employmentTypesList}
+              onChangeEmploymentOption={this.onChangeEmploymentOption}
+            />
             <hr />
             <p>Salary Range</p>
             <SalaryOptions options={salaryRangesList} />
