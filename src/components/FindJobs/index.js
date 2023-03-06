@@ -123,13 +123,21 @@ class FindJobs extends Component {
             <Profile />
             <hr />
             <p>Types of Employment</p>
-            <EmploymentOptions
-              options={employmentTypesList}
-              onChangeEmploymentOption={this.onChangeEmploymentOption}
-            />
+            {employmentTypesList.map(eachItem => (
+              <EmploymentOptions
+                key={eachItem.id}
+                details={eachItem}
+                onChangeEmploymentOption={this.onChangeEmploymentOption}
+              />
+            ))}
+
             <hr />
             <p>Salary Range</p>
-            <SalaryOptions options={salaryRangesList} />
+
+            <SalaryOptions
+              options={salaryRangesList}
+              onChangePackageType={this.onChangePackageType}
+            />
           </div>
 
           <div>
