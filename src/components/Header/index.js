@@ -3,7 +3,7 @@ import {Link, withRouter} from 'react-router-dom'
 
 const Header = props => {
   const onLogout = () => {
-    Cookies.remove('jswToken')
+    Cookies.remove('jwtToken')
     const {history} = props
     history.replace('/login')
     console.log('in logout')

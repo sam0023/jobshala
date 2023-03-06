@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import Cookies from 'js-cookie'
 import './index.css'
 
 class Profile extends Component {
@@ -13,9 +14,18 @@ class Profile extends Component {
   }
 
   profileApiRequest = async () => {
-    const response = await fetch('https://apis.ccbp.in/profile')
+    const accessToken = Cookies.get('jwtToken')
+    const option = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+    const response = await fetch('https://apis.ccbp.in/profile', option)
 
-    const data = response.json()
+    const data = await response.json()
+
+    console.log(`profile response ${data}`)
 
     if (response.ok) {
       const profileDetails = data.profile_details

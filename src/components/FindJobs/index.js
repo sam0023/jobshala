@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import Cookies from 'js-cookie'
 import Profile from '../Profile'
 import EmploymentOptions from '../EmploymentOptions'
 import SalaryOptions from '../SalaryOptions'
@@ -6,7 +7,7 @@ import Header from '../Header'
 import JobCard from '../JobCard'
 
 import './index.css'
-import {async} from 'rxjs'
+// import {async} from 'rxjs'
 
 const employmentTypesList = [
   {
@@ -61,12 +62,25 @@ class FindJobs extends Component {
 
   apiRequest = async () => {
     const {employmentType, minimumPackage, apiSearch} = this.state
+
+    const accessToken = Cookies.get('jwtToken')
+    console.log('token')
+    console.log(accessToken)
+    const option = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
     const api = `https://apis.ccbp.in/jobs?employment_type=${employmentType.join(
       ',',
     )}&minimum_package=${minimumPackage}&search=${apiSearch}`
 
-    const response = await fetch(api)
-    const data = response.json()
+    const response = await fetch(api, option)
+    console.log('response')
+    console.log(response)
+    const data = await response.json()
+    console.log(data)
 
     if (response.ok) {
       const {jobs} = data
@@ -87,7 +101,8 @@ class FindJobs extends Component {
   }
 
   onChangeEmploymentOption = (option, isSelected) => {
-    const employmentType = this.state
+    const {employmentType} = this.state
+    console.log(`employmentType ${employmentType}`)
     let updatedEmploymentType
     if (isSelected) {
       updatedEmploymentType = [...employmentType, option]
@@ -96,11 +111,11 @@ class FindJobs extends Component {
         eachItem => eachItem !== option,
       )
     }
-    this.setState({employmentType: updatedEmploymentType}, this.apiRequest())
+    this.setState({employmentType: updatedEmploymentType}, this.apiRequest)
   }
 
   onChangePackageType = minimumPackage => {
-    this.setState({minimumPackage}, this.apiRequest())
+    this.setState({minimumPackage}, this.apiRequest)
   }
 
   onChangeSearch = event => {
@@ -125,7 +140,7 @@ class FindJobs extends Component {
             <p>Types of Employment</p>
             {employmentTypesList.map(eachItem => (
               <EmploymentOptions
-                key={eachItem.id}
+                key={eachItem.employmentTypeId}
                 details={eachItem}
                 onChangeEmploymentOption={this.onChangeEmploymentOption}
               />
@@ -141,7 +156,7 @@ class FindJobs extends Component {
           </div>
 
           <div>
-            {this.renderSearch()}
+            {/* {this.renderSearch()} */}
             {jobsList.map(eachJob => (
               <JobCard key={eachJob.id} details={eachJob} />
             ))}

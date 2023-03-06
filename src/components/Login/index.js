@@ -11,7 +11,7 @@ class Login extends Component {
   }
 
   renderSuccessView = data => {
-    Cookies.set('jswToken', data.jsw_token, {expires: 1})
+    Cookies.set('jwtToken', data.jwt_token, {expires: 1})
     const {history} = this.props
     history.push('/')
   }
@@ -54,7 +54,7 @@ class Login extends Component {
   render() {
     const {username, password, errorMsg} = this.state
 
-    const token = Cookies.get('jswToken')
+    const token = Cookies.get('jwtToken')
     if (token !== undefined) {
       return <Redirect to="/" />
     }

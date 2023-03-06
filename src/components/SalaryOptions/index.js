@@ -1,33 +1,38 @@
 import {Component} from 'react'
 
-class SalaryOptions extends Component { 
+class SalaryOptions extends Component {
+  state = {activeOption: ''}
 
-    state={activeOption:""} 
+  onUpdatePackageType = event => {
+    const {onChangePackageType} = this.props
+    const activeOption = event.target.value
+    onChangePackageType(activeOption)
+    this.setState({activeOption})
+  }
 
-    const {options, onChangePackageType } = this.props  
-
-    onUpdatePackageType=(event)=>{
-        const activeOption= event.target.value  
-        onChangePackageType(activeOption) 
-        this.setState({activeOption})
-    } 
-
-    render(){ 
-        const{activeOption}=this.state
-        return(
-             <Form>
-                 {
-                     options.map(eachOption=>{
-                         const {salaryRangeId,label} = eachOption
-                         return ( 
-                         <div>
-                             <input id={ salaryRangeId} type="radio" value={salaryRangeId} selected={activeOption===salaryRangeId} /> 
-                             <label htmlFor={salaryRangeId} > {label}</label>
-                         </div>
-                     )})
-                 }
-             </Form>
-        )
-    }
-
+  render() {
+    const {options} = this.props
+    const {activeOption} = this.state
+    return (
+      <form>
+        {options.map(eachOption => {
+          const {salaryRangeId, label} = eachOption
+          return (
+            <div key={salaryRangeId}>
+              <input
+                id={salaryRangeId}
+                type="radio"
+                // name="salary"
+                value={salaryRangeId}
+                checked={activeOption === salaryRangeId}
+                onChange={this.onUpdatePackageType}
+              />
+              <label htmlFor={salaryRangeId}> {label}</label>
+            </div>
+          )
+        })}
+      </form>
+    )
+  }
 }
+export default SalaryOptions
