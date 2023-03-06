@@ -50,6 +50,13 @@ const salaryRangesList = [
   },
 ]
 
+const views = {
+  initial: 'INITIAL',
+  loading: 'LOADING',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+}
+
 class FindJobs extends Component {
   state = {
     jobsList: [],
@@ -57,6 +64,7 @@ class FindJobs extends Component {
     minimumPackage: '',
     apiSearch: '',
     activeSearch: '',
+    activeView: views.initial,
   }
 
   componentDidMount() {
@@ -64,6 +72,7 @@ class FindJobs extends Component {
   }
 
   apiRequest = async () => {
+    this.setState({activeView: views.loading})
     const {employmentType, minimumPackage, apiSearch} = this.state
     console.log(`api search ${apiSearch}`)
 
@@ -100,7 +109,9 @@ class FindJobs extends Component {
         title: eachJob.title,
       }))
 
-      this.setState({jobsList: updatedData})
+      this.setState({jobsList: updatedData, activeView: views.success})
+    } else {
+      this.setState({activeView: views.failure})
     }
   }
 
@@ -139,11 +150,20 @@ class FindJobs extends Component {
     }
   }
 
-  renderLoadingFinalView = () => (
-    <div className="loader-container" data-testid="loader">
-      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
-    </div>
-  )
+  renderLoadingView = () => {
+    console.log('print loading')
+    return (
+      <div className="loader-container" data-testid="loader">
+        <Loader
+          className="loader"
+          type="ThreeDots"
+          color="#ffffff"
+          height="50"
+          width="50"
+        />
+      </div>
+    )
+  }
 
   renderSuccessView = () => {
     const {jobsList} = this.state
@@ -165,8 +185,25 @@ class FindJobs extends Component {
     </div>
   )
 
+  renderFinalView = () => {
+    const {activeView} = this.state
+
+    switch (activeView) {
+      case views.loading:
+        return this.renderLoadingView()
+
+      case views.success:
+        return this.renderSuccessView()
+      case views.failure:
+        return this.renderFailureView()
+
+      default:
+        return null
+    }
+  }
+
   render() {
-    const {jobsList} = this.state
+    // const {jobsList} = this.state
     return (
       <div>
         <Header />
@@ -205,9 +242,10 @@ class FindJobs extends Component {
               </button>
             </div>
             <div>
-              {jobsList.map(eachJob => (
+              {this.renderFinalView()}
+              {/* {jobsList.map(eachJob => (
                 <JobCard key={eachJob.id} details={eachJob} />
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
