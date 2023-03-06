@@ -1,6 +1,9 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import {BsSearch} from 'react-icons/bs'
+import Loader from 'react-loader-spinner'
 import Profile from '../Profile'
+
 import EmploymentOptions from '../EmploymentOptions'
 import SalaryOptions from '../SalaryOptions'
 import Header from '../Header'
@@ -62,10 +65,11 @@ class FindJobs extends Component {
 
   apiRequest = async () => {
     const {employmentType, minimumPackage, apiSearch} = this.state
+    console.log(`api search ${apiSearch}`)
 
     const accessToken = Cookies.get('jwtToken')
-    console.log('token')
-    console.log(accessToken)
+    // console.log('token')
+    // console.log(accessToken)
     const option = {
       method: 'GET',
       headers: {
@@ -77,10 +81,10 @@ class FindJobs extends Component {
     )}&minimum_package=${minimumPackage}&search=${apiSearch}`
 
     const response = await fetch(api, option)
-    console.log('response')
-    console.log(response)
+    // console.log('response')
+    // console.log(response)
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
 
     if (response.ok) {
       const {jobs} = data
@@ -128,6 +132,39 @@ class FindJobs extends Component {
     this.setState({apiSearch: activeSearch}, this.apiRequest)
   }
 
+  onPressEnter = event => {
+    if (event.key === 'Enter') {
+      const {activeSearch} = this.state
+      this.setState({apiSearch: activeSearch}, this.apiRequest)
+    }
+  }
+
+  renderLoadingFinalView = () => (
+    <div className="loader-container" data-testid="loader">
+      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
+    </div>
+  )
+
+  renderSuccessView = () => {
+    const {jobsList} = this.state
+
+    return jobsList.map(eachJob => (
+      <JobCard key={eachJob.id} details={eachJob} />
+    ))
+  }
+
+  renderFailureView = () => (
+    <div>
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+        alt="failure view"
+      />
+      <h1>Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for.</p>
+      <button type="button">Retry</button>
+    </div>
+  )
+
   render() {
     const {jobsList} = this.state
     return (
@@ -156,10 +193,22 @@ class FindJobs extends Component {
           </div>
 
           <div>
-            {/* {this.renderSearch()} */}
-            {jobsList.map(eachJob => (
-              <JobCard key={eachJob.id} details={eachJob} />
-            ))}
+            <div>
+              <input
+                type="search"
+                onChange={this.onChangeSearch}
+                onKeyDown={this.onPressEnter}
+              />
+
+              <button type="button" onClick={this.onClickSearch}>
+                <BsSearch />
+              </button>
+            </div>
+            <div>
+              {jobsList.map(eachJob => (
+                <JobCard key={eachJob.id} details={eachJob} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
