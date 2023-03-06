@@ -86,8 +86,17 @@ class FindJobs extends Component {
     }
   }
 
-  onChangeEmploymentOption = employmentOptions => {
-    this.setState({employmentType: employmentOptions}, this.apiRequest())
+  onChangeEmploymentOption = (option, isSelected) => {
+    const employmentType = this.state
+    let updatedEmploymentType
+    if (isSelected) {
+      updatedEmploymentType = [...employmentType, option]
+    } else {
+      updatedEmploymentType = employmentType.filter(
+        eachItem => eachItem !== option,
+      )
+    }
+    this.setState({employmentType: updatedEmploymentType}, this.apiRequest())
   }
 
   onChangePackageType = minimumPackage => {
