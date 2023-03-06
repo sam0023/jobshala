@@ -81,6 +81,8 @@ class FindJobs extends Component {
         rating: eachJob.rating,
         title: eachJob.title,
       }))
+
+      this.setState({jobsList: updatedData})
     }
   }
 
