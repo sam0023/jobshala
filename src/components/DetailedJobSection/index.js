@@ -1,10 +1,11 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 import SimilarJobCard from '../SimilarJobCard'
 import Skills from '../Skills'
 import './index.css'
 
-const renderOption = {
+const viewOptions = {
   initial: 'INITIAL',
   loading: 'Loading',
   success: 'SUCCESS',
@@ -16,7 +17,7 @@ class DetailedJobSection extends Component {
     jobDetails: {},
     similarJobs: [],
     skills: [],
-    activeView: renderOption.initial,
+    activeView: viewOptions.initial,
   }
 
   componentDidMount() {
@@ -24,13 +25,17 @@ class DetailedJobSection extends Component {
   }
 
   handleSuccessRequest = data => {
-    this.setState({activeView: renderOption.loading})
-    const {skills} = data
+    this.setState({activeView: viewOptions.loading})
+    console.log(data)
+    const jobDetails = data.job_details
+    const {skills} = jobDetails
     const updatedSkills = skills.map(eachSkill => ({
       imageUrl: eachSkill.image_url,
       name: eachSkill.name,
     }))
     const similarJobs = data.similar_jobs
+    console.log('similar jobs')
+    console.log(similarJobs)
     const updatedSimilarJobs = similarJobs.map(eachJob => ({
       companyLogoUrl: eachJob.company_logo_url,
       employmentType: eachJob.employment_type,
@@ -41,13 +46,15 @@ class DetailedJobSection extends Component {
       title: eachJob.title,
     }))
     this.setState({
-      jobDetails: data,
+      jobDetails,
       similarJobs: updatedSimilarJobs,
       skills: updatedSkills,
+      activeView: viewOptions.success,
     })
   }
 
   requestDetailedJobApi = async () => {
+    this.setState({activeView: viewOptions.loading})
     const {match} = this.props
     const {params} = match
     const {id} = params
@@ -60,18 +67,21 @@ class DetailedJobSection extends Component {
       },
     }
     const response = await fetch(api, option)
-    console.log('response')
-    console.log(response)
+    // console.log('response')
+    // console.log(response)
 
-    const data = response.json()
+    const data = await response.json()
     if (response.ok) {
       this.handleSuccessRequest(data)
+    } else {
+      this.setState({activeView: viewOptions.failure})
     }
   }
 
-  render() {
+  renderSuccessView = () => {
+    // console.log('in sucessView')
     const {jobDetails, skills, similarJobs} = this.state
-
+    console.log(this.state)
     const companyLogoUrl = jobDetails.company_logo_url
     const companyWebsiteUrl = jobDetails.company_website_url
     const employmentType = jobDetails.employment_type
@@ -131,6 +141,60 @@ class DetailedJobSection extends Component {
         </div>
       </div>
     )
+  }
+
+  renderLoadingView = () => (
+    <div className="loader-container" data-testid="loader">
+      <Loader
+        className="loader"
+        type="ThreeDots"
+        color="#ffffff"
+        height="50"
+        width="50"
+      />
+    </div>
+  )
+
+  renderFailureView = () => (
+    <div>
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+        alt="failure view"
+      />
+      <h1>Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for.</p>
+      <button type="button">Retry</button>
+    </div>
+  )
+
+  renderFinalView = () => {
+    // console.log(`in render final view`)
+
+    const {activeView} = this.state
+
+    // console.log(activeView)
+    switch (activeView) {
+      case viewOptions.loading:
+        return this.renderLoadingView()
+      case viewOptions.success:
+        return this.renderSuccessView()
+      case viewOptions.failure:
+        return this.renderFailureView()
+      default:
+        return null
+    }
+    //   switch (key) {
+    //       case value:
+
+    //           break;
+
+    //       default:
+    //           break;
+    //   }
+  }
+
+  render() {
+    return this.renderFinalView()
   }
 }
 export default DetailedJobSection
