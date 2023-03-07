@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import './index.css'
 
 const jobCard = props => {
@@ -5,7 +6,7 @@ const jobCard = props => {
   const {
     companyLogoUrl,
     employmentType,
-
+    id,
     jobDescription,
     location,
     packagePerAnnum,
@@ -14,32 +15,34 @@ const jobCard = props => {
   } = details
 
   return (
-    <div>
+    <Link to={`/jobs/${id}`}>
       <div>
-        <img src={companyLogoUrl} alt="logo" />
         <div>
-          <h1>{title}</h1>
+          <img src={companyLogoUrl} alt="logo" />
           <div>
-            <p>{rating}</p>
+            <h1>{title}</h1>
+            <div>
+              <p>{rating}</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div>
         <div>
           <div>
-            <p>{location}</p>
+            <div>
+              <p>{location}</p>
+            </div>
+            <div>
+              <p>{employmentType}</p>
+            </div>
           </div>
-          <div>
-            <p>{employmentType}</p>
-          </div>
+          <p>{packagePerAnnum}LPA</p>
         </div>
-        <p>{packagePerAnnum}LPA</p>
+        <hr />
+        <h1>Description</h1>
+        <p>{jobDescription}</p>
       </div>
-      <hr />
-      <h1>Description</h1>
-      <p>{jobDescription}</p>
-    </div>
+    </Link>
   )
 }
 export default jobCard

@@ -15,6 +15,7 @@ class Profile extends Component {
 
   profileApiRequest = async () => {
     const accessToken = Cookies.get('jwtToken')
+    console.log(accessToken)
     const option = {
       method: 'GET',
       headers: {
