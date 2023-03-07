@@ -6,7 +6,7 @@ const Skills = props => {
 
   return (
     <li>
-      <img src={imageUrl} alt="skills" />
+      <img src={imageUrl} alt={name} />
       <p>{name}</p>
     </li>
   )

@@ -11,9 +11,9 @@ class Login extends Component {
   }
 
   renderSuccessView = data => {
-    Cookies.set('jwtToken', data.jwt_token, {expires: 1})
+    Cookies.set('jwt_token', data.jwt_token, {expires: 1})
     const {history} = this.props
-    history.push('/')
+    history.replace('/')
   }
 
   renderFailureView = async data => {
@@ -84,7 +84,7 @@ class Login extends Component {
             />
             <br />
             {errorMsg !== '' && <p>*{errorMsg}</p>}
-            <button type="submit">Submit</button>
+            <button type="submit">Login</button>
             <p>rahul@2021</p>
           </form>
         </div>

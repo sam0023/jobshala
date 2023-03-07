@@ -1,7 +1,9 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+
 import Loader from 'react-loader-spinner'
 import SimilarJobCard from '../SimilarJobCard'
+import Header from '../Header'
 import Skills from '../Skills'
 import './index.css'
 
@@ -85,59 +87,63 @@ class DetailedJobSection extends Component {
     const companyLogoUrl = jobDetails.company_logo_url
     const companyWebsiteUrl = jobDetails.company_website_url
     const employmentType = jobDetails.employment_type
-    const {id, location, rating, title} = jobDetails
+    const {location, rating, title} = jobDetails
     const jobDescription = jobDetails.job_description
     const lifeAtCompany = jobDetails.life_at_company
     const packagePerAnnum = jobDetails.package_per_annum
 
     return (
       <div>
-        <div>
-          <img src={`${companyLogoUrl}`} alt="company logo" />
-          <div>
-            <h1>{title}</h1>
-            <div>
-              <p>{rating}</p>
-            </div>
-          </div>
-        </div>
+        <Header />
         <div>
           <div>
+            <img src={`${companyLogoUrl}`} alt="job details company logo" />
             <div>
-              <p>{location}</p>
-            </div>
-            <div>
-              <p>{employmentType}</p>
+              <h1>{title}</h1>
+              <div>
+                <p>{rating}</p>
+              </div>
             </div>
           </div>
-          <p>{packagePerAnnum}</p>
-        </div>
-        <hr />
-        <div>
           <div>
-            <h1>Description</h1>
             <div>
-              <p>Visit</p>
+              <div>
+                <p>{location}</p>
+              </div>
+              <div>
+                <p>{employmentType}</p>
+              </div>
             </div>
+            <p>{packagePerAnnum}</p>
           </div>
-          <p>{jobDescription}</p>
-          <h1>Skills</h1>
-          <ul>
-            {skills.map(eachItem => (
-              <Skills key={eachItem.name} details={eachItem} />
-            ))}
-          </ul>
-          <h1>Life at Company</h1>
+          <hr />
           <div>
-            <p>{lifeAtCompany.description}</p>
-            <img src={lifeAtCompany.image_url} alt="life at company" />
+            <div>
+              <h1>Description</h1>
+
+              <a href={companyWebsiteUrl}>
+                <p>Visit</p>
+              </a>
+            </div>
+            <p>{jobDescription}</p>
+            <h1>Skills</h1>
+            <ul>
+              {skills.map(eachItem => (
+                <Skills key={eachItem.name} details={eachItem} />
+              ))}
+            </ul>
+            <h1>Life at Company</h1>
+            <div>
+              <p>{lifeAtCompany.description}</p>
+              <img src={lifeAtCompany.image_url} alt="life at company" />
+            </div>
+            <h1>Similar Jobs</h1>
+            <ul>
+              {similarJobs.map(eachItem => (
+                <SimilarJobCard key={eachItem.id} details={eachItem} />
+              ))}
+            </ul>
           </div>
-          <h1>Similar Jobs</h1>
-          <ul>
-            {similarJobs.map(eachItem => (
-              <SimilarJobCard key={eachItem.id} details={eachItem} />
-            ))}
-          </ul>
         </div>
       </div>
     )
@@ -163,7 +169,9 @@ class DetailedJobSection extends Component {
       />
       <h1>Oops! Something Went Wrong</h1>
       <p>We cannot seem to find the page you are looking for.</p>
-      <button type="button">Retry</button>
+      <button type="button" onClick={this.requestDetailedJobApi}>
+        Retry
+      </button>
     </div>
   )
 

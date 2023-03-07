@@ -15,10 +15,10 @@ const jobCard = props => {
   } = details
 
   return (
-    <Link to={`/jobs/${id}`}>
-      <div>
+    <li>
+      <Link to={`/jobs/${id}`}>
         <div>
-          <img src={companyLogoUrl} alt="logo" />
+          <img src={companyLogoUrl} alt="company logo" />
           <div>
             <h1>{title}</h1>
             <div>
@@ -41,8 +41,8 @@ const jobCard = props => {
         <hr />
         <h1>Description</h1>
         <p>{jobDescription}</p>
-      </div>
-    </Link>
+      </Link>
+    </li>
   )
 }
 export default jobCard

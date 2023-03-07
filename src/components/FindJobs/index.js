@@ -168,6 +168,19 @@ class FindJobs extends Component {
   renderSuccessView = () => {
     const {jobsList} = this.state
 
+    if (jobsList.length === 0) {
+      return (
+        <div>
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
+            alt="no jobs"
+          />
+          <h1>No Jobs Found</h1>
+          <p>We could not find any jobs. Try other filters</p>
+        </div>
+      )
+    }
+
     return jobsList.map(eachJob => (
       <JobCard key={eachJob.id} details={eachJob} />
     ))
@@ -181,7 +194,9 @@ class FindJobs extends Component {
       />
       <h1>Oops! Something Went Wrong</h1>
       <p>We cannot seem to find the page you are looking for.</p>
-      <button type="button">Retry</button>
+      <button type="button" onClick={this.apiRequest}>
+        Retry
+      </button>
     </div>
   )
 
@@ -211,17 +226,19 @@ class FindJobs extends Component {
           <div>
             <Profile />
             <hr />
-            <p>Types of Employment</p>
-            {employmentTypesList.map(eachItem => (
-              <EmploymentOptions
-                key={eachItem.employmentTypeId}
-                details={eachItem}
-                onChangeEmploymentOption={this.onChangeEmploymentOption}
-              />
-            ))}
+            <h1>Type of Employment</h1>
+            <ul>
+              {employmentTypesList.map(eachItem => (
+                <EmploymentOptions
+                  key={eachItem.employmentTypeId}
+                  details={eachItem}
+                  onChangeEmploymentOption={this.onChangeEmploymentOption}
+                />
+              ))}
+            </ul>
 
             <hr />
-            <p>Salary Range</p>
+            <h1>Salary Range</h1>
 
             <SalaryOptions
               options={salaryRangesList}
@@ -237,16 +254,20 @@ class FindJobs extends Component {
                 onKeyDown={this.onPressEnter}
               />
 
-              <button type="button" onClick={this.onClickSearch}>
+              <button
+                type="button"
+                onClick={this.onClickSearch}
+                data-testid="searchButton"
+              >
                 <BsSearch />
               </button>
             </div>
-            <div>
+            <ul>
               {this.renderFinalView()}
               {/* {jobsList.map(eachJob => (
                 <JobCard key={eachJob.id} details={eachJob} />
               ))} */}
-            </div>
+            </ul>
           </div>
         </div>
       </div>

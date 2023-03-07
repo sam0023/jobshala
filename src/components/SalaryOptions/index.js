@@ -14,11 +14,11 @@ class SalaryOptions extends Component {
     const {options} = this.props
     const {activeOption} = this.state
     return (
-      <form>
+      <ul>
         {options.map(eachOption => {
           const {salaryRangeId, label} = eachOption
           return (
-            <div key={salaryRangeId}>
+            <li key={salaryRangeId}>
               <input
                 id={salaryRangeId}
                 type="radio"
@@ -28,10 +28,10 @@ class SalaryOptions extends Component {
                 onChange={this.onUpdatePackageType}
               />
               <label htmlFor={salaryRangeId}> {label}</label>
-            </div>
+            </li>
           )
         })}
-      </form>
+      </ul>
     )
   }
 }

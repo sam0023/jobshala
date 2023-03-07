@@ -23,7 +23,7 @@ class EmploymentOptions extends Component {
     const {isSelected} = this.state
 
     return (
-      <div>
+      <li>
         <input
           id={employmentTypeId}
           type="checkBox"
@@ -32,7 +32,7 @@ class EmploymentOptions extends Component {
           onChange={this.toggleSelection}
         />
         <label htmlFor={employmentTypeId}>{label}</label>
-      </div>
+      </li>
     )
   }
 }
