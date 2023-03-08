@@ -3,7 +3,7 @@ import {Link, withRouter} from 'react-router-dom'
 
 const Header = props => {
   const onLogout = () => {
-    Cookies.remove('jswToken')
+    Cookies.remove('jwt_token')
     const {history} = props
     history.replace('/login')
     console.log('in logout')
@@ -11,22 +11,26 @@ const Header = props => {
 
   return (
     <nav>
-      <img
-        src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
-        alt="website logo"
-      />
+      <Link to="/">
+        <img
+          src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
+          alt="website logo"
+        />
+      </Link>
       <ul>
-        <Link to="/">
-          <li>Home</li>
-        </Link>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/jobs">Jobs</Link>
+        </li>
 
-        <Link to="/login">
-          <li>Jobs</li>
-        </Link>
+        <li>
+          <button type="button" onClick={onLogout}>
+            logout
+          </button>
+        </li>
       </ul>
-      <button type="button" onClick={onLogout}>
-        logout
-      </button>
     </nav>
   )
 }
