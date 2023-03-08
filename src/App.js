@@ -8,6 +8,7 @@ import DetailedJobSection from './components/DetailedJobSection'
 import NotFound from './components/NotFound'
 import './App.css'
 
+// adding comment from pavan account
 // These are the lists used in the application. You can move them to any component needed.
 
 // Replace your code here
